@@ -10,9 +10,6 @@ def AllMethods(request):
     routes = [
         {'GET' : '/job-search/'},
         {'GET' : '/e-estekhdam/'},
-        {'POST' : '/bing-search/'},
-        {'POST' : '/pypi-search/'},
-        {'POST' : '/subscene-search/'},
     ]
 
     return Response(routes)
