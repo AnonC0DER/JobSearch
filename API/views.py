@@ -1,4 +1,4 @@
-from API.serializer import Eestekhdam, Yarijob
+from API.serializer import Eestekhdam, Yarijob, Karboom
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
@@ -8,8 +8,10 @@ from rest_framework.decorators import api_view
 def AllMethods(request):
     '''All API methods which are available'''
     routes = [
-        {'GET' : '/job-search/'},
-        {'GET' : '/e-estekhdam/'},
+        {'GET' : '/job-search/query/'},
+        {'GET' : '/e-estekhdam/query/'},
+        {'GET' : '/yarijob/query/'},
+        {'GET' : '/karboom/query/'},
     ]
 
     return Response(routes)
@@ -29,8 +31,8 @@ def EestekhdamView(request, query):
 
     # If not found
     else:
-        data = {'Bad request' : 'Not found'}
-        return Response(data=data, status=status.HTTP_400_BAD_REQUEST)
+        data = {'Error' : 'Not found'}
+        return Response(data=data, status=status.HTTP_404_NOT_FOUND)
 
 
 @api_view(['GET'])
@@ -47,5 +49,23 @@ def YarijobView(request, query):
 
     # If not found
     else:
-        data = {'Bad request' : 'Not found'}
-        return Response(data=data, status=status.HTTP_400_BAD_REQUEST)
+        data = {'Error' : 'Not found'}
+        return Response(data=data, status=status.HTTP_404_NOT_FOUND)
+
+
+@api_view(['GET'])
+def KarboomView(request, query):
+    '''Return results from karboom.io'''
+
+    # Check the result
+    if Karboom(query) != 'Not found':
+        # Get results
+        data = Karboom(query)
+
+        # Return the response        
+        return Response(data=data, status=status.HTTP_200_OK)
+
+    # If not found
+    else:
+        data = {'Error' : 'Not found'}
+        return Response(data=data, status=status.HTTP_404_NOT_FOUND)

@@ -92,7 +92,7 @@ def Yarijob(query):
     soup = BeautifulSoup(page, 'lxml')
 
     # If not found
-    if soup.find('span', 'c-notify c-notify--noMarginBottom c-notify--large'):
+    if soup.find('span', 'noResultMessage'):
         return 'Not found'
     
     else:
@@ -153,4 +153,74 @@ def Yarijob(query):
                 }
             )
 
-    return data
+        return data
+
+
+def Karboom(query):
+    '''Search and return results from karboom.io using web scraping'''
+
+    # Prepare url
+    url = f'https://karboom.io/jobs?q={query}'
+    # Make a request
+    page = requests.get(url, headers=Random_user_agent()).text
+
+    # Read the page
+    soup = BeautifulSoup(page, 'lxml')
+
+    # If not found
+    if soup.find('div', {'class' : 'col-md-8 col-md-offset-2 kb-shadow m-t-35 p-t-30 p-b-30 text-center'}):
+        return 'Not found'
+
+    else:
+        # Find all data
+        find_job_titles = soup.find_all('h3', {'class' : 'sm-title-size ellipsis-text width-100 m-0'})
+        find_company_names = soup.find_all('span', {'class' : 'company-name ellipsis-text m-0'})
+        find_published_dates = soup.find_all('p', {'class' : 'date sm-text-size kb-text-gray-light m-0'})
+        find_cities = soup.find_all('span', class_='pull-right')
+
+        job_titles = []
+        more_details_urls = []
+        company_names = []
+        published_dates = []
+        cities = []
+
+        # Append job title
+        for title in find_job_titles:
+            job_titles.append(title.a.text)
+
+        # Append job more details url
+        for url in find_job_titles:
+            more_details_urls.append(url.a['href'])
+
+        # Append company name
+        for name in find_company_names:
+            company_names.append(name.text)
+
+        # Append published date
+        for date in find_published_dates:
+            published_dates.append(date.text)
+
+        # Append city
+        for city in find_cities:
+            cities.append(city.text)
+
+        data = []
+
+        # Append each job to data list
+        for title, url, company, date, city in zip(job_titles, more_details_urls,
+            company_names, published_dates, cities):
+            
+            data.append(
+                {
+                    'job_title'  : title.strip(),
+                    'company_name' : company.strip(),
+                    'city' : city.strip(),
+                    'published_date' : date.strip(),
+                    'more_details' : url.strip()
+                }
+            )
+
+        return data
+        
+        
+# Karboom('جاوا')
