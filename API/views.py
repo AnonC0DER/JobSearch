@@ -1,4 +1,4 @@
-from API.serializer import Eestekhdam
+from API.serializer import Eestekhdam, Yarijob
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
@@ -33,5 +33,19 @@ def EestekhdamView(request, query):
         return Response(data=data, status=status.HTTP_400_BAD_REQUEST)
 
 
+@api_view(['GET'])
+def YarijobView(request, query):
+    '''Return results from yarijob.ir'''
 
+    # Check the result
+    if Yarijob(query) != 'Not found':
+        # Get results
+        data = Yarijob(query)
 
+        # Return the response        
+        return Response(data=data, status=status.HTTP_200_OK)
+
+    # If not found
+    else:
+        data = {'Bad request' : 'Not found'}
+        return Response(data=data, status=status.HTTP_400_BAD_REQUEST)
