@@ -221,6 +221,3 @@ def Karboom(query):
             )
 
         return data
-        
-        
-# Karboom('جاوا')
