@@ -1,4 +1,4 @@
-from API.serializer import Eestekhdam, Yarijob, Karboom, JobSearch
+from API.serializer import Eestekhdam, Yarijob, Karboom, JobSearch, JobInja
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -106,6 +106,24 @@ def KarboomView(request, query):
     if Karboom(query) != 'Not found':
         # Get results
         data = Karboom(query)
+
+        # Return the response        
+        return Response(data=data, status=status.HTTP_200_OK)
+
+    # If not found
+    else:
+        data = {'Error' : 'Not found'}
+        return Response(data=data, status=status.HTTP_404_NOT_FOUND)
+
+
+@api_view(['GET'])
+def JobinjaView(request, query):
+    '''Return results from jobinja.ir'''
+
+    # Check the result
+    if JobInja(query) != 'Not found':
+        # Get results
+        data = JobInja(query)
 
         # Return the response        
         return Response(data=data, status=status.HTTP_200_OK)
