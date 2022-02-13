@@ -1,6 +1,7 @@
-from API.serializer import Eestekhdam, Yarijob, Karboom
+from API.serializer import Eestekhdam, Yarijob, Karboom, JobSearch
 from rest_framework import status
 from rest_framework.response import Response
+from rest_framework.views import APIView
 from rest_framework.decorators import api_view
 ##############################################
 
@@ -8,13 +9,57 @@ from rest_framework.decorators import api_view
 def AllMethods(request):
     '''All API methods which are available'''
     routes = [
-        {'GET' : '/job-search/query/'},
-        {'GET' : '/e-estekhdam/query/'},
-        {'GET' : '/yarijob/query/'},
-        {'GET' : '/karboom/query/'},
+        {
+            'GET' : {
+                '/job-search/query/',
+                '/e-estekhdam/query/',
+                '/yarijob/query/',
+                '/karboom/query/'
+            },
+            'POST' : {
+                '/job-search/'
+            }
+        }
     ]
 
-    return Response(routes)
+    return Response(routes, status=status.HTTP_200_OK)
+
+
+class JobSearchView(APIView):
+    '''Search in JobSearch database and return jobs'''
+
+    def get(self, request, query, format=None):
+        '''GET method'''
+
+        # Check the result
+        if JobSearch(query) != 'Not found':
+            # Get results
+            data = JobSearch(query)
+        
+            return Response(data=data, status=status.HTTP_200_OK)
+
+        # If not found
+        else:
+            data = {'Error' : 'Not found'}
+            return Response(data=data, status=status.HTTP_404_NOT_FOUND)
+
+    def post(self, request, format=None):
+        '''POST method'''
+
+        query = request.data['query']
+
+        # Check the result
+        if JobSearch(query) != 'Not found':
+            # Get results
+            data = JobSearch(query)
+        
+            return Response(data=data, status=status.HTTP_200_OK)
+
+        # If not found
+        else:
+            data = {'Error' : 'Not found'}
+            return Response(data=data, status=status.HTTP_404_NOT_FOUND)
+
 
 
 @api_view(['GET'])

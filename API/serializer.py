@@ -1,6 +1,35 @@
 import requests
 from bs4 import BeautifulSoup
-from API.utils import Random_user_agent
+from API.db import Add_new_job, SearchIn_JobSearch_db
+from API.utils import Random_user_agent, URL_to_bs64, bs64_to_URL
+
+
+def JobSearch(query):
+    '''Search in JobSearch database and return results'''
+    
+    # Query and return results
+    results = SearchIn_JobSearch_db(query)
+    
+    if len(results) == 0:
+        return 'Not found'
+
+    else:
+        data = []
+        
+        # Append results to data list
+        for result in results:
+            data.append(
+                {
+                    'job_title' : result[0],
+                    'more_details' : bs64_to_URL(result[1]),
+                    'company_name' : result[2],
+                    'published_date' : result[3],
+                    'city' : result[4],
+                    'contract' : result[5].split('\n') if result[5] else None
+                }
+            )
+        
+        return data
 
 
 def Eestekhdam(query):
@@ -71,11 +100,19 @@ def Eestekhdam(query):
                     'job_title'  : title.strip(),
                     'company_name' : company.strip(),
                     'city' : city.strip(),
-                    'contract' : contract.strip(),
+                    'contract' : contract.strip().split('\n'),
                     'published_date' : date.strip(),
                     'more_details' : url.strip()
                 }
             )
+
+            # Add each job to JobSearch database
+            try:
+                Add_new_job(title=title.strip(), url=url.strip(), comp_name=company.strip(),
+                            date=date.strip(), city=city.strip(), contract=contract.strip())
+
+            except Exception as e:
+                print(e)
 
         return data
 
@@ -153,6 +190,15 @@ def Yarijob(query):
                 }
             )
 
+            # Add each job to JobSearch database
+            try:
+                Add_new_job(title=title.replace('\n', '').strip(), url=url.replace('\n', '').strip(),
+                             comp_name=company.replace('\n', '').strip(), date=date.replace('\n', '').strip(), 
+                             city=city.replace('\n', '').strip().split('،')[1].replace(' ', ''))
+
+            except Exception as e:
+                print(e)
+
         return data
 
 
@@ -219,5 +265,13 @@ def Karboom(query):
                     'more_details' : url.strip()
                 }
             )
+
+            # Add each job to JobSearch database
+            try:
+                Add_new_job(title=title.strip(), url=URL_to_bs64(url), comp_name=company.strip(),
+                            date=date.strip(), city=city.strip())
+        
+            except Exception as e:
+                print(e)
 
         return data
