@@ -275,3 +275,87 @@ def Karboom(query):
                 print(e)
 
         return data
+
+
+def JobInja(query):
+    '''Search and return results from jobinja.ir using web scraping'''
+
+    # Prepare url
+    url = f'https://jobinja.ir/jobs?filters%5Bkeywords%5D%5B%5D={query}'
+    # Make a request
+    page = requests.get(url, headers=Random_user_agent()).text
+
+    # Read the page
+    soup = BeautifulSoup(page, 'lxml')
+
+    # If not found
+    if soup.find('div', {'class' : 'c-jobSearch__noResult'}):
+        return 'Not found'
+
+    else:
+        # Find all data
+        find_job_titles = soup.find_all('a', {'class' : 'c-jobListView__titleLink'})
+        find_published_dates = soup.find_all('span', class_='c-jobListView__passedDays')
+        find_compNames_cities_contract = soup.find_all('li', {'class' : 'c-jobListView__metaItem'})
+
+        job_titles = []
+        more_details_urls = []
+        company_names = []
+        published_dates = []
+        cities = []
+        contracts = []
+
+        # Append job title
+        for title in find_job_titles:
+            job_titles.append(title.text)
+
+        # Append job more details url
+        for url in find_job_titles:
+            more_details_urls.append(url['href'])
+
+        # Append company name
+        for name in find_compNames_cities_contract:
+            if 'c-icon--construction' == name.i['class'][3]:
+                company_names.append(name.text)
+
+        # Append published date
+        for date in find_published_dates:
+            published_dates.append(date.text)
+
+        # Append city
+        for city in find_compNames_cities_contract:
+            if 'c-icon--place' == city.i['class'][3]:
+                cities.append(city.text)
+        
+        # Append contract
+        for contract in find_compNames_cities_contract:
+            if 'c-icon--resume' == contract.i['class'][3]:
+                contracts.append(contract.span.span.text)
+
+        data = []
+
+        # Append each job to data list
+        for title, url, company, date, city, contract in zip(job_titles, more_details_urls,
+            company_names, published_dates, cities, contracts):
+            
+            data.append(
+                {
+                    'job_title'  : title.strip(),
+                    'company_name' : company.strip(),
+                    'city' : city.strip(),
+                    'contract' : contract.strip().replace('\n', '').replace('             ', ''),
+                    'published_date' : date.strip(),
+                    'more_details' : url.strip()
+                }
+            )
+
+            # Add each job to JobSearch database
+            try:
+                Add_new_job(title=title.strip(), url=URL_to_bs64(url), comp_name=company.strip(),
+                            date=date.strip(), city=city.strip(), 
+                            contract=contract.strip().replace('\n', '').replace('             ', ''))
+        
+            except Exception as e:
+                print(e)
+
+        return data
