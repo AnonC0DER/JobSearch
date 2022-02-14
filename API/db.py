@@ -18,7 +18,7 @@ conn = pgs.connect(
 create_table = '''
     CREATE TABLE IF NOT EXISTS Jobs (
         job_title text NOT NULL,
-        more_details_url text NOT NULL,
+        more_details_url text NOT NULL UNIQUE,
         company_name text,
         published_date text,
         city text,
@@ -57,14 +57,16 @@ def Add_new_job(title, url, comp_name, date, city, contract=None):
         # Insert values into JobSearch table
         insert_into_table = f'''
         INSERT INTO Jobs (job_title, more_details_url, company_name, published_date, city, contract)
-        VALUES ('{title}', '{url}', '{comp_name}', '{date}', '{city}', '{contract}');
+        VALUES ('{title}', '{url}', '{comp_name}', '{date}', '{city}', '{contract}')
+        ON CONFLICT (more_details_url) DO NOTHING;
         '''
 
     else:
         # Insert values into JobSearch table but contract
         insert_into_table = f'''
         INSERT INTO Jobs (job_title, more_details_url, company_name, published_date, city)
-        VALUES ('{title}', '{url}', '{comp_name}', '{date}', '{city}');
+        VALUES ('{title}', '{url}', '{comp_name}', '{date}', '{city}')
+        ON CONFLICT (more_details_url) DO NOTHING;
         '''
 
     cur = conn.cursor()

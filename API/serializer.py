@@ -92,8 +92,8 @@ def Eestekhdam(query):
         data = []
         
         # Append each job to data list
-        for title, url, company, date, city, contract in zip(job_titles, more_details_urls,
-            company_names, published_dates, cities, contracts):
+        for title, url, company, date, city, contract, _ in zip(job_titles, more_details_urls,
+            company_names, published_dates, cities, contracts, range(0, 7)):
             
             data.append(
                 {
@@ -176,8 +176,8 @@ def Yarijob(query):
         data = []
 
         # Append each job to data list
-        for title, url, company, date, city, contract in zip(job_titles, more_details_urls,
-            company_names, published_dates, cities, contracts):
+        for title, url, company, date, city, contract, _ in zip(job_titles, more_details_urls,
+            company_names, published_dates, cities, contracts, range(0, 7)):
             
             data.append(
                 {
@@ -253,8 +253,8 @@ def Karboom(query):
         data = []
 
         # Append each job to data list
-        for title, url, company, date, city in zip(job_titles, more_details_urls,
-            company_names, published_dates, cities):
+        for title, url, company, date, city, _ in zip(job_titles, more_details_urls,
+            company_names, published_dates, cities, range(0, 7)):
             
             data.append(
                 {
@@ -335,8 +335,8 @@ def JobInja(query):
         data = []
 
         # Append each job to data list
-        for title, url, company, date, city, contract in zip(job_titles, more_details_urls,
-            company_names, published_dates, cities, contracts):
+        for title, url, company, date, city, contract, _ in zip(job_titles, more_details_urls,
+            company_names, published_dates, cities, contracts, range(0, 7)):
             
             data.append(
                 {
@@ -412,8 +412,8 @@ def Linkedin(query):
         data = []
 
         # Append each job to data list
-        for title, url, company, date, location in zip(job_titles, more_details_urls,
-            company_names, published_dates, locations):
+        for title, url, company, date, location, _ in zip(job_titles, more_details_urls,
+            company_names, published_dates, locations, range(0, 7)):
             
             data.append(
                 {
