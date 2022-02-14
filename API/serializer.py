@@ -24,7 +24,7 @@ def JobSearch(query):
                     'more_details' : bs64_to_URL(result[1]),
                     'company_name' : result[2],
                     'published_date' : result[3],
-                    'city' : result[4],
+                    'location' : result[4],
                     'contract' : result[5].split('\n') if result[5] else None
                 }
             )
@@ -354,6 +354,81 @@ def JobInja(query):
                 Add_new_job(title=title.strip(), url=URL_to_bs64(url), comp_name=company.strip(),
                             date=date.strip(), city=city.strip(), 
                             contract=contract.strip().replace('\n', '').replace('             ', ''))
+        
+            except Exception as e:
+                print(e)
+
+        return data
+
+
+def Linkedin(query):
+    '''Search and return results from Linkedin.com using web scraping'''
+
+    # Prepare url
+    url = f'https://www.linkedin.com/jobs/search?keywords={query}'
+    # Make a request
+    page = requests.get(url, headers=Random_user_agent()).text
+
+    # Read the page
+    soup = BeautifulSoup(page, 'lxml')
+
+    # If not found
+    if soup.find('p', {'class' : 'no-results__subheading'}):
+        return 'Not found'
+
+    else:
+        # Find all data
+        find_job_titles = soup.find_all('a', {'class' : 'base-card__full-link'})
+        find_company_names = soup.find_all('a', {'data-tracking-control-name' : 'public_jobs_jserp-result_job-search-card-subtitle'})
+        find_published_dates = soup.find_all('time', {'class' : 'job-search-card__listdate--new'})
+        find_locations = soup.find_all('span', class_='job-search-card__location')
+
+        job_titles = []
+        more_details_urls = []
+        company_names = []
+        published_dates = []
+        locations = []
+
+        # Append job title
+        for title in find_job_titles:
+            job_titles.append(title.text)
+
+        # Append job more details url
+        for url in find_job_titles:
+            more_details_urls.append(url['href'])
+        
+        # Append company name
+        for name in find_company_names:
+            company_names.append(name.text)
+
+        # Append published date
+        for date in find_published_dates:
+            published_dates.append(date.text)
+
+        # Append city
+        for location in find_locations:
+            locations.append(location.text)
+
+        data = []
+
+        # Append each job to data list
+        for title, url, company, date, location in zip(job_titles, more_details_urls,
+            company_names, published_dates, locations):
+            
+            data.append(
+                {
+                    'job_title'  : title.strip(),
+                    'company_name' : company.strip(),
+                    'location' : location.strip(),
+                    'published_date' : date.strip(),
+                    'more_details' : url.strip()
+                }
+            )
+
+            # Add each job to JobSearch database
+            try:
+                Add_new_job(title=title.strip(), url=URL_to_bs64(url), comp_name=company.strip(),
+                            date=date.strip(), city=location.strip())
         
             except Exception as e:
                 print(e)

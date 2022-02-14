@@ -1,4 +1,4 @@
-from API.serializer import Eestekhdam, Yarijob, Karboom, JobSearch, JobInja
+from API.serializer import Eestekhdam, Yarijob, Karboom, JobSearch, JobInja, Linkedin
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -60,6 +60,23 @@ class JobSearchView(APIView):
             data = {'Error' : 'Not found'}
             return Response(data=data, status=status.HTTP_404_NOT_FOUND)
 
+
+@api_view(['GET'])
+def LinkedinView(request, query):
+    '''Return results from linkedin.com'''
+
+    # Check the result
+    if Linkedin(query) != 'Not found':
+        # Get results
+        data = Linkedin(query)
+
+        # Return the response        
+        return Response(data=data, status=status.HTTP_200_OK)
+
+    # If not found
+    else:
+        data = {'Error' : 'Not found'}
+        return Response(data=data, status=status.HTTP_404_NOT_FOUND)
 
 
 @api_view(['GET'])
