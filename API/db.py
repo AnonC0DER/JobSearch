@@ -1,17 +1,15 @@
 import psycopg2 as pgs
-import os
-from dotenv import load_dotenv
-load_dotenv()
+from core.config import *
 
 # Connect to database and create the table
 
 # You may need to use CREATE DATABASE dbname; before you create connection
 ## Get values from .env file
 conn = pgs.connect(
-    host=os.getenv('JOBS_HOST'),
-    database=os.getenv('JOBS_DATABASE'),
-    user=os.getenv('JOBS_USER'),
-    password=os.getenv('JOBS_PASSWORD'),
+    host=JOBS_HOST,
+    database=JOBS_DATABASE,
+    user=JOBS_USER,
+    password=JOBS_PASSWORD,
 )
 
 # create jobs table and its columns if they don't exists
