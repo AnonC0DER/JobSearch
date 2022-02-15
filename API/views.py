@@ -2,13 +2,14 @@ from API.serializer import Eestekhdam, Yarijob, Karboom, JobSearch, JobInja, Lin
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.decorators import api_view
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.authentication import TokenAuthentication
 ##############################################
 
-@api_view(['GET'])
-def AllMethods(request):
+class AllMethods(APIView):
     '''All API methods which are available'''
-    routes = [
+
+    data = [
         {
             'GET' : {
                 '/job-search/query/',
@@ -22,11 +23,23 @@ def AllMethods(request):
         }
     ]
 
-    return Response(routes, status=status.HTTP_200_OK)
+    def get(self, request, format=None):
+        '''GET method'''
+        
+        return Response(data=self.data, status=status.HTTP_200_OK)
+
+
+    def post(self, request, format=None):
+        '''POST method'''
+        
+        return Response(data=self.data, status=status.HTTP_200_OK)
 
 
 class JobSearchView(APIView):
     '''Search in JobSearch database and return jobs'''
+
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (IsAuthenticated,)
 
     def get(self, request, query, format=None):
         '''GET method'''
@@ -61,91 +74,196 @@ class JobSearchView(APIView):
             return Response(data=data, status=status.HTTP_404_NOT_FOUND)
 
 
-@api_view(['GET'])
-def LinkedinView(request, query):
+class LinkedinView(APIView):
     '''Return results from linkedin.com'''
 
-    # Check the result
-    if Linkedin(query) != 'Not found':
-        # Get results
-        data = Linkedin(query)
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (IsAuthenticated,)
 
-        # Return the response        
-        return Response(data=data, status=status.HTTP_200_OK)
+    def get(self, request, query, format=None):
+        '''GET method'''
 
-    # If not found
-    else:
-        data = {'Error' : 'Not found'}
-        return Response(data=data, status=status.HTTP_404_NOT_FOUND)
+        # Check the result
+        if Linkedin(query) != 'Not found':
+            # Get results
+            data = Linkedin(query)
+        
+            return Response(data=data, status=status.HTTP_200_OK)
+
+        # If not found
+        else:
+            data = {'Error' : 'Not found'}
+            return Response(data=data, status=status.HTTP_404_NOT_FOUND)
+
+    def post(self, request, format=None):
+        '''POST method'''
+
+        query = request.data['query']
+
+        # Check the result
+        if Linkedin(query) != 'Not found':
+            # Get results
+            data = Linkedin(query)
+        
+            return Response(data=data, status=status.HTTP_200_OK)
+
+        # If not found
+        else:
+            data = {'Error' : 'Not found'}
+            return Response(data=data, status=status.HTTP_404_NOT_FOUND)
 
 
-@api_view(['GET'])
-def EestekhdamView(request, query):
+class EestekhdamView(APIView):
     '''Return results from e-estekhdam.com'''
 
-    # Check the result
-    if Eestekhdam(query) != 'Not found':
-        # Get results
-        data = Eestekhdam(query)
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (IsAuthenticated,)
 
-        # Return the response        
-        return Response(data=data, status=status.HTTP_200_OK)
+    def get(self, request, query, format=None):
+        '''GET method'''
 
-    # If not found
-    else:
-        data = {'Error' : 'Not found'}
-        return Response(data=data, status=status.HTTP_404_NOT_FOUND)
+        # Check the result
+        if Eestekhdam(query) != 'Not found':
+            # Get results
+            data = Eestekhdam(query)
+        
+            return Response(data=data, status=status.HTTP_200_OK)
+
+        # If not found
+        else:
+            data = {'Error' : 'Not found'}
+            return Response(data=data, status=status.HTTP_404_NOT_FOUND)
+
+    def post(self, request, format=None):
+        '''POST method'''
+
+        query = request.data['query']
+
+        # Check the result
+        if Eestekhdam(query) != 'Not found':
+            # Get results
+            data = Eestekhdam(query)
+        
+            return Response(data=data, status=status.HTTP_200_OK)
+
+        # If not found
+        else:
+            data = {'Error' : 'Not found'}
+            return Response(data=data, status=status.HTTP_404_NOT_FOUND)
 
 
-@api_view(['GET'])
-def YarijobView(request, query):
+class YarijobView(APIView):
     '''Return results from yarijob.ir'''
 
-    # Check the result
-    if Yarijob(query) != 'Not found':
-        # Get results
-        data = Yarijob(query)
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (IsAuthenticated,)
 
-        # Return the response        
-        return Response(data=data, status=status.HTTP_200_OK)
+    def get(self, request, query, format=None):
+        '''GET method'''
 
-    # If not found
-    else:
-        data = {'Error' : 'Not found'}
-        return Response(data=data, status=status.HTTP_404_NOT_FOUND)
+        # Check the result
+        if Yarijob(query) != 'Not found':
+            # Get results
+            data = Yarijob(query)
+        
+            return Response(data=data, status=status.HTTP_200_OK)
+
+        # If not found
+        else:
+            data = {'Error' : 'Not found'}
+            return Response(data=data, status=status.HTTP_404_NOT_FOUND)
+
+    def post(self, request, format=None):
+        '''POST method'''
+
+        query = request.data['query']
+
+        # Check the result
+        if Yarijob(query) != 'Not found':
+            # Get results
+            data = Yarijob(query)
+        
+            return Response(data=data, status=status.HTTP_200_OK)
+
+        # If not found
+        else:
+            data = {'Error' : 'Not found'}
+            return Response(data=data, status=status.HTTP_404_NOT_FOUND)
 
 
-@api_view(['GET'])
-def KarboomView(request, query):
+class KarboomView(APIView):
     '''Return results from karboom.io'''
 
-    # Check the result
-    if Karboom(query) != 'Not found':
-        # Get results
-        data = Karboom(query)
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (IsAuthenticated,)
 
-        # Return the response        
-        return Response(data=data, status=status.HTTP_200_OK)
+    def get(self, request, query, format=None):
+        '''GET method'''
 
-    # If not found
-    else:
-        data = {'Error' : 'Not found'}
-        return Response(data=data, status=status.HTTP_404_NOT_FOUND)
+        # Check the result
+        if Karboom(query) != 'Not found':
+            # Get results
+            data = Karboom(query)
+        
+            return Response(data=data, status=status.HTTP_200_OK)
+
+        # If not found
+        else:
+            data = {'Error' : 'Not found'}
+            return Response(data=data, status=status.HTTP_404_NOT_FOUND)
+
+    def post(self, request, format=None):
+        '''POST method'''
+
+        query = request.data['query']
+
+        # Check the result
+        if Karboom(query) != 'Not found':
+            # Get results
+            data = Karboom(query)
+        
+            return Response(data=data, status=status.HTTP_200_OK)
+
+        # If not found
+        else:
+            data = {'Error' : 'Not found'}
+            return Response(data=data, status=status.HTTP_404_NOT_FOUND)
 
 
-@api_view(['GET'])
-def JobinjaView(request, query):
+class JobinjaView(APIView):
     '''Return results from jobinja.ir'''
 
-    # Check the result
-    if JobInja(query) != 'Not found':
-        # Get results
-        data = JobInja(query)
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (IsAuthenticated,)
 
-        # Return the response        
-        return Response(data=data, status=status.HTTP_200_OK)
+    def get(self, request, query, format=None):
+        '''GET method'''
 
-    # If not found
-    else:
-        data = {'Error' : 'Not found'}
-        return Response(data=data, status=status.HTTP_404_NOT_FOUND)
+        # Check the result
+        if JobInja(query) != 'Not found':
+            # Get results
+            data = JobInja(query)
+        
+            return Response(data=data, status=status.HTTP_200_OK)
+
+        # If not found
+        else:
+            data = {'Error' : 'Not found'}
+            return Response(data=data, status=status.HTTP_404_NOT_FOUND)
+
+    def post(self, request, format=None):
+        '''POST method'''
+
+        query = request.data['query']
+
+        # Check the result
+        if JobInja(query) != 'Not found':
+            # Get results
+            data = JobInja(query)
+        
+            return Response(data=data, status=status.HTTP_200_OK)
+
+        # If not found
+        else:
+            data = {'Error' : 'Not found'}
+            return Response(data=data, status=status.HTTP_404_NOT_FOUND)
