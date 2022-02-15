@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'rest_framework',
     'core',
+    'users',
 ]
 
 REST_FRAMEWORK = { 'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema' }
