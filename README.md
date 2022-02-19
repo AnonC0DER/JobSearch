@@ -38,3 +38,12 @@ JS_DATABASE = database2
 JS_USER = user2
 JS_PASSWORD = password2
 ```
+
+
+# Commands
+1. `python manage.py migrate`
+2. `python manage.py createsuperuser`
+3. `python manage.py runserver`
+
+
+More updates are coming...
