@@ -13,12 +13,26 @@ class AllMethods(APIView):
         {
             'GET' : {
                 '/job-search/query/',
+                '/linkedin/query/',
                 '/e-estekhdam/query/',
                 '/yarijob/query/',
-                '/karboom/query/'
+                '/karboom/query/',
+                '/jobinja/query/',
             },
             'POST' : {
-                '/job-search/'
+                '/job-search/',
+                '/linkedin/',
+                '/e-estekhdam/',
+                '/yarijob/',
+                '/karboom/',
+                '/jobinja/',
+            },
+            'Create token and get authtoken (POST)' : {
+                    '/users/create/',
+                    '/users/token/',
+            },
+            'Documentation' : {
+                '/docs/',
             }
         }
     ]
