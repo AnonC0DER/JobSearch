@@ -46,4 +46,13 @@ JS_PASSWORD = password2
 3. `python manage.py runserver`
 
 
-More updates are coming...
+# Frontend
+It's just a really simple example. I created it using HTML, Css and Javascript to show you how to use APIs in Frontend. (I'm not a frontend developer, so sorry beacuse of this template) 
+<br>
+<br>
+Demo : https://j0b-search.herokuapp.com/
+
+## Files 
+[Templates](https://github.com/AnonC0DER/JobSearch/tree/main/templates) <br>
+[Css](https://github.com/AnonC0DER/JobSearch/tree/main/static/css) <br>
+[Templates](https://github.com/AnonC0DER/JobSearch/tree/main/static/js) <br>
