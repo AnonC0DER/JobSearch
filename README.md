@@ -53,6 +53,6 @@ It's just a really simple example. I created it using HTML, Css and Javascript t
 Demo : https://j0b-search.herokuapp.com/
 
 ## Files 
-[Templates](https://github.com/AnonC0DER/JobSearch/tree/main/templates) <br>
-[Css](https://github.com/AnonC0DER/JobSearch/tree/main/static/css) <br>
-[Templates](https://github.com/AnonC0DER/JobSearch/tree/main/static/js) <br>
+[Front-end templates](https://github.com/AnonC0DER/JobSearch/tree/main/templates) <br>
+[Front Css](https://github.com/AnonC0DER/JobSearch/tree/main/static/css) <br>
+[Front Js](https://github.com/AnonC0DER/JobSearch/tree/main/static/js) <br>
